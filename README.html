@@ -1,0 +1,244 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module eyenalysis</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>eyenalysis</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/sebastiaan/git/eyenalysis/eyenalysis.py">/home/sebastiaan/git/eyenalysis/eyenalysis.py</a></font></td></tr></table>
+    <p><tt>Copyright&nbsp;2011&nbsp;Sebastiaan&nbsp;Mathot<br>
+&lt;<a href="http://www.cogsci.nl/smathot">http://www.cogsci.nl/smathot</a>&gt;<br>
+&nbsp;<br>
+This&nbsp;program&nbsp;is&nbsp;free&nbsp;software:&nbsp;you&nbsp;can&nbsp;redistribute&nbsp;it&nbsp;and/or&nbsp;modify<br>
+it&nbsp;under&nbsp;the&nbsp;terms&nbsp;of&nbsp;the&nbsp;GNU&nbsp;General&nbsp;Public&nbsp;License&nbsp;as&nbsp;published&nbsp;by<br>
+the&nbsp;Free&nbsp;Software&nbsp;Foundation,&nbsp;either&nbsp;version&nbsp;3&nbsp;of&nbsp;the&nbsp;License,&nbsp;or<br>
+(at&nbsp;your&nbsp;option)&nbsp;any&nbsp;later&nbsp;version.<br>
+&nbsp;<br>
+This&nbsp;program&nbsp;is&nbsp;distributed&nbsp;in&nbsp;the&nbsp;hope&nbsp;that&nbsp;it&nbsp;will&nbsp;be&nbsp;useful,<br>
+but&nbsp;WITHOUT&nbsp;ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nbsp;of<br>
+MERCHANTABILITY&nbsp;or&nbsp;FITNESS&nbsp;FOR&nbsp;A&nbsp;PARTICULAR&nbsp;PURPOSE.&nbsp;&nbsp;See&nbsp;the<br>
+GNU&nbsp;General&nbsp;Public&nbsp;License&nbsp;for&nbsp;more&nbsp;details.<br>
+&nbsp;<br>
+You&nbsp;should&nbsp;have&nbsp;received&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;GNU&nbsp;General&nbsp;Public&nbsp;License<br>
+along&nbsp;with&nbsp;this&nbsp;program.&nbsp;&nbsp;If&nbsp;not,&nbsp;see&nbsp;&lt;<a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>&gt;.<br>
+&nbsp;<br>
+DATA&nbsp;FORMATS<br>
+============<br>
+&nbsp;<br>
+A&nbsp;dataset&nbsp;consists&nbsp;of&nbsp;a&nbsp;dictionary&nbsp;where&nbsp;each&nbsp;dictionary&nbsp;entry&nbsp;is&nbsp;a&nbsp;single&nbsp;named<br>
+scanpath.&nbsp;A&nbsp;scanpath&nbsp;consists&nbsp;of&nbsp;a&nbsp;list&nbsp;of&nbsp;points.&nbsp;A&nbsp;point&nbsp;consists&nbsp;of&nbsp;a&nbsp;list&nbsp;of<br>
+coordinates.<br>
+&nbsp;<br>
+#&nbsp;Create&nbsp;a&nbsp;point<br>
+pt1&nbsp;=&nbsp;[0,0]<br>
+pt2&nbsp;=&nbsp;[1,1]<br>
+&nbsp;<br>
+#&nbsp;Create&nbsp;a&nbsp;scanpath<br>
+sp1&nbsp;=&nbsp;[pt1,&nbsp;pt2]<br>
+&nbsp;<br>
+#&nbsp;Create&nbsp;some&nbsp;more&nbsp;points<br>
+pt2&nbsp;=&nbsp;[0.5,0.5]<br>
+pt3&nbsp;=&nbsp;[1.5,1.5]<br>
+&nbsp;<br>
+#&nbsp;Create&nbsp;a&nbsp;scanpath<br>
+sp2&nbsp;=&nbsp;[pt2,&nbsp;pt3]<br>
+&nbsp;<br>
+#&nbsp;Create&nbsp;a&nbsp;dataset<br>
+spd&nbsp;=&nbsp;{"sp1"&nbsp;:&nbsp;sp1,&nbsp;"sp2"&nbsp;:&nbsp;sp2}<br>
+&nbsp;<br>
+USAGE<br>
+====<br>
+&nbsp;<br>
+from&nbsp;eyenalysis&nbsp;import&nbsp;*<br>
+&nbsp;<br>
+print&nbsp;"Distance&nbsp;between&nbsp;sp1&nbsp;and&nbsp;sp2:",&nbsp;<a href="#-sp_dist">sp_dist</a>(sp1,&nbsp;sp2)<br>
+cm&nbsp;=&nbsp;<a href="#-cross_compare">cross_compare</a>(spd)<br>
+print&nbsp;"Cross-compare&nbsp;matrix:"<br>
+for&nbsp;sp1&nbsp;in&nbsp;cm:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;sp1,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for&nbsp;sp2&nbsp;in&nbsp;cm[sp1]:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"%.4f"&nbsp;%&nbsp;cm[sp1][sp2],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-array"><strong>array</strong></a>(...)</dt><dd><tt><a href="#-array">array</a>(object,&nbsp;dtype=None,&nbsp;copy=True,&nbsp;order=None,&nbsp;subok=False,&nbsp;ndmin=0)<br>
+&nbsp;<br>
+Create&nbsp;an&nbsp;array.<br>
+&nbsp;<br>
+Parameters<br>
+----------<br>
+object&nbsp;:&nbsp;array_like<br>
+&nbsp;&nbsp;&nbsp;&nbsp;An&nbsp;array,&nbsp;any&nbsp;object&nbsp;exposing&nbsp;the&nbsp;array&nbsp;interface,&nbsp;an<br>
+&nbsp;&nbsp;&nbsp;&nbsp;object&nbsp;whose&nbsp;__array__&nbsp;method&nbsp;returns&nbsp;an&nbsp;array,&nbsp;or&nbsp;any<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(nested)&nbsp;sequence.<br>
+dtype&nbsp;:&nbsp;data-type,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;The&nbsp;desired&nbsp;data-type&nbsp;for&nbsp;the&nbsp;array.&nbsp;&nbsp;If&nbsp;not&nbsp;given,&nbsp;then<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;type&nbsp;will&nbsp;be&nbsp;determined&nbsp;as&nbsp;the&nbsp;minimum&nbsp;type&nbsp;required<br>
+&nbsp;&nbsp;&nbsp;&nbsp;to&nbsp;hold&nbsp;the&nbsp;objects&nbsp;in&nbsp;the&nbsp;sequence.&nbsp;&nbsp;This&nbsp;argument&nbsp;can&nbsp;only<br>
+&nbsp;&nbsp;&nbsp;&nbsp;be&nbsp;used&nbsp;to&nbsp;'upcast'&nbsp;the&nbsp;array.&nbsp;&nbsp;For&nbsp;downcasting,&nbsp;use&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;.astype(t)&nbsp;method.<br>
+copy&nbsp;:&nbsp;bool,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;true&nbsp;(default),&nbsp;then&nbsp;the&nbsp;object&nbsp;is&nbsp;copied.&nbsp;&nbsp;Otherwise,&nbsp;a&nbsp;copy<br>
+&nbsp;&nbsp;&nbsp;&nbsp;will&nbsp;only&nbsp;be&nbsp;made&nbsp;if&nbsp;__array__&nbsp;returns&nbsp;a&nbsp;copy,&nbsp;if&nbsp;obj&nbsp;is&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nested&nbsp;sequence,&nbsp;or&nbsp;if&nbsp;a&nbsp;copy&nbsp;is&nbsp;needed&nbsp;to&nbsp;satisfy&nbsp;any&nbsp;of&nbsp;the&nbsp;other<br>
+&nbsp;&nbsp;&nbsp;&nbsp;requirements&nbsp;(`dtype`,&nbsp;`order`,&nbsp;etc.).<br>
+order&nbsp;:&nbsp;{'C',&nbsp;'F',&nbsp;'A'},&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Specify&nbsp;the&nbsp;order&nbsp;of&nbsp;the&nbsp;array.&nbsp;&nbsp;If&nbsp;order&nbsp;is&nbsp;'C'&nbsp;(default),&nbsp;then&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;array&nbsp;will&nbsp;be&nbsp;in&nbsp;C-contiguous&nbsp;order&nbsp;(last-index&nbsp;varies&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fastest).&nbsp;&nbsp;If&nbsp;order&nbsp;is&nbsp;'F',&nbsp;then&nbsp;the&nbsp;returned&nbsp;array<br>
+&nbsp;&nbsp;&nbsp;&nbsp;will&nbsp;be&nbsp;in&nbsp;Fortran-contiguous&nbsp;order&nbsp;(first-index&nbsp;varies&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fastest).&nbsp;&nbsp;If&nbsp;order&nbsp;is&nbsp;'A',&nbsp;then&nbsp;the&nbsp;returned&nbsp;array&nbsp;may<br>
+&nbsp;&nbsp;&nbsp;&nbsp;be&nbsp;in&nbsp;any&nbsp;order&nbsp;(either&nbsp;C-,&nbsp;Fortran-contiguous,&nbsp;or&nbsp;even<br>
+&nbsp;&nbsp;&nbsp;&nbsp;discontiguous).<br>
+subok&nbsp;:&nbsp;bool,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;True,&nbsp;then&nbsp;sub-classes&nbsp;will&nbsp;be&nbsp;passed-through,&nbsp;otherwise<br>
+&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;returned&nbsp;array&nbsp;will&nbsp;be&nbsp;forced&nbsp;to&nbsp;be&nbsp;a&nbsp;base-class&nbsp;array&nbsp;(default).<br>
+ndmin&nbsp;:&nbsp;int,&nbsp;optional<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Specifies&nbsp;the&nbsp;minimum&nbsp;number&nbsp;of&nbsp;dimensions&nbsp;that&nbsp;the&nbsp;resulting<br>
+&nbsp;&nbsp;&nbsp;&nbsp;array&nbsp;should&nbsp;have.&nbsp;&nbsp;Ones&nbsp;will&nbsp;be&nbsp;pre-pended&nbsp;to&nbsp;the&nbsp;shape&nbsp;as<br>
+&nbsp;&nbsp;&nbsp;&nbsp;needed&nbsp;to&nbsp;meet&nbsp;this&nbsp;requirement.<br>
+&nbsp;<br>
+Examples<br>
+--------<br>
+&gt;&gt;&gt;&nbsp;np.<a href="#-array">array</a>([1,&nbsp;2,&nbsp;3])<br>
+<a href="#-array">array</a>([1,&nbsp;2,&nbsp;3])<br>
+&nbsp;<br>
+Upcasting:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;np.<a href="#-array">array</a>([1,&nbsp;2,&nbsp;3.0])<br>
+<a href="#-array">array</a>([&nbsp;1.,&nbsp;&nbsp;2.,&nbsp;&nbsp;3.])<br>
+&nbsp;<br>
+More&nbsp;than&nbsp;one&nbsp;dimension:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;np.<a href="#-array">array</a>([[1,&nbsp;2],&nbsp;[3,&nbsp;4]])<br>
+<a href="#-array">array</a>([[1,&nbsp;2],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3,&nbsp;4]])<br>
+&nbsp;<br>
+Minimum&nbsp;dimensions&nbsp;2:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;np.<a href="#-array">array</a>([1,&nbsp;2,&nbsp;3],&nbsp;ndmin=2)<br>
+<a href="#-array">array</a>([[1,&nbsp;2,&nbsp;3]])<br>
+&nbsp;<br>
+Type&nbsp;provided:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;np.<a href="#-array">array</a>([1,&nbsp;2,&nbsp;3],&nbsp;dtype=complex)<br>
+<a href="#-array">array</a>([&nbsp;1.+0.j,&nbsp;&nbsp;2.+0.j,&nbsp;&nbsp;3.+0.j])<br>
+&nbsp;<br>
+Data-type&nbsp;consisting&nbsp;of&nbsp;more&nbsp;than&nbsp;one&nbsp;element:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;x&nbsp;=&nbsp;np.<a href="#-array">array</a>([(1,2),(3,4)],dtype=[('a','&lt;i4'),('b','&lt;i4')])<br>
+&gt;&gt;&gt;&nbsp;x['a']<br>
+<a href="#-array">array</a>([1,&nbsp;3])<br>
+&nbsp;<br>
+Creating&nbsp;an&nbsp;array&nbsp;from&nbsp;sub-classes:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;np.<a href="#-array">array</a>(np.mat('1&nbsp;2;&nbsp;3&nbsp;4'))<br>
+<a href="#-array">array</a>([[1,&nbsp;2],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3,&nbsp;4]])<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;np.<a href="#-array">array</a>(np.mat('1&nbsp;2;&nbsp;3&nbsp;4'),&nbsp;subok=True)<br>
+matrix([[1,&nbsp;2],<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3,&nbsp;4]])</tt></dd></dl>
+ <dl><dt><a name="-cross_compare"><strong>cross_compare</strong></a>(spd, norm<font color="#909090">=True</font>, _whiten<font color="#909090">=True</font>)</dt><dd><tt>Cross-compare&nbsp;all&nbsp;scanpaths<br>
+&nbsp;<br>
+Arguments:<br>
+spd&nbsp;--&nbsp;a&nbsp;dictionary&nbsp;of&nbsp;scanpaths<br>
+&nbsp;<br>
+Keyword&nbsp;arguments:<br>
+norm&nbsp;--&nbsp;indicates&nbsp;if&nbsp;the&nbsp;distances&nbsp;should&nbsp;be&nbsp;normalized&nbsp;(default=True)&nbsp;&nbsp;<br>
+_whiten&nbsp;--&nbsp;indicates&nbsp;if&nbsp;the&nbsp;dataset&nbsp;should&nbsp;be&nbsp;whitened&nbsp;(see&nbsp;<a href="#-whiten">whiten</a>())<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(default=True)<br>
+&nbsp;<br>
+Returns:<br>
+A&nbsp;matrix&nbsp;of&nbsp;pair-wise&nbsp;distances</tt></dd></dl>
+ <dl><dt><a name="-kmeans_cluster"><strong>kmeans_cluster</strong></a>(cm, k<font color="#909090">=2</font>, i<font color="#909090">=1</font>)</dt><dd><tt>Perform&nbsp;K-means&nbsp;clustering&nbsp;on&nbsp;a&nbsp;cross-comparison&nbsp;matrix&nbsp;as&nbsp;returned&nbsp;by<br>
+<a href="#-cross_compare">cross_compare</a>()<br>
+&nbsp;<br>
+Arguments:<br>
+cm&nbsp;--&nbsp;the&nbsp;cross-comparison&nbsp;matrix<br>
+&nbsp;<br>
+Keyword&nbsp;arguments:<br>
+k&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;clusters<br>
+i&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;iterations<br>
+&nbsp;<br>
+Returns:<br>
+A&nbsp;key-cluster&nbsp;dictionary</tt></dd></dl>
+ <dl><dt><a name="-scale"><strong>scale</strong></a>(spd, scaling)</dt><dd><tt>Multiplies&nbsp;all&nbsp;coordinates&nbsp;by&nbsp;a&nbsp;certain&nbsp;scaling&nbsp;factor.<br>
+&nbsp;<br>
+Arguments:<br>
+spd&nbsp;--&nbsp;a&nbsp;dataset&nbsp;(dictionary&nbsp;of&nbsp;scanpaths)<br>
+scaling&nbsp;--&nbsp;a&nbsp;single&nbsp;scaling&nbsp;factor&nbsp;(for&nbsp;all&nbsp;coordinates)&nbsp;or&nbsp;a&nbsp;list&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;scaling&nbsp;factors.&nbsp;If&nbsp;a&nbsp;list&nbsp;is&nbsp;passed,&nbsp;the&nbsp;length&nbsp;of&nbsp;the&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;should&nbsp;match&nbsp;the&nbsp;number&nbsp;of&nbsp;coordinates.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns:<br>
+A&nbsp;"scaled"&nbsp;dataset&nbsp;(dictionary&nbsp;of&nbsp;scanpaths)</tt></dd></dl>
+ <dl><dt><a name="-sp_dist"><strong>sp_dist</strong></a>(sp1, sp2, norm<font color="#909090">=True</font>)</dt><dd><tt>Determines&nbsp;the&nbsp;distance&nbsp;between&nbsp;two&nbsp;scanpaths.<br>
+&nbsp;<br>
+Arguments:<br>
+sp1&nbsp;--&nbsp;the&nbsp;first&nbsp;scanpath<br>
+sp2&nbsp;--&nbsp;the&nbsp;second&nbsp;scanpath<br>
+&nbsp;<br>
+Keyword&nbsp;arguments:<br>
+norm&nbsp;--&nbsp;indicates&nbsp;if&nbsp;the&nbsp;distance&nbsp;should&nbsp;be&nbsp;normalized&nbsp;(default=True)<br>
+&nbsp;<br>
+Returns:<br>
+A&nbsp;distance</tt></dd></dl>
+ <dl><dt><a name="-sp_from_txt"><strong>sp_from_txt</strong></a>(path, delimiter<font color="#909090">=','</font>, skiprows<font color="#909090">=0</font>)</dt><dd><tt>Reads&nbsp;a&nbsp;single&nbsp;scanpath&nbsp;from&nbsp;a&nbsp;file.&nbsp;This&nbsp;function&nbsp;expects&nbsp;a&nbsp;value-separated<br>
+text&nbsp;file&nbsp;containing&nbsp;only&nbsp;numeric&nbsp;values,&nbsp;where&nbsp;each&nbsp;row&nbsp;corresponds&nbsp;to&nbsp;a<br>
+single&nbsp;point.<br>
+&nbsp;<br>
+Arguments:<br>
+path&nbsp;--&nbsp;the&nbsp;file&nbsp;path<br>
+&nbsp;<br>
+Keyword&nbsp;arguments:<br>
+delimiter&nbsp;--&nbsp;delimiter&nbsp;character&nbsp;(default=",")<br>
+skiprows&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;rows&nbsp;to&nbsp;skip.&nbsp;Useful&nbsp;for&nbsp;skipping&nbsp;non-numeric<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;column&nbsp;headers&nbsp;(default=0)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns:<br>
+A&nbsp;scanpath&nbsp;(note:&nbsp;a&nbsp;2-dimensional&nbsp;numpy&nbsp;array&nbsp;is&nbsp;returned,&nbsp;but&nbsp;this&nbsp;can&nbsp;be<br>
+used&nbsp;interchangeably&nbsp;with&nbsp;a&nbsp;regular&nbsp;Python&nbsp;list&nbsp;for&nbsp;Eyenalysis)</tt></dd></dl>
+ <dl><dt><a name="-spd_from_txt"><strong>spd_from_txt</strong></a>(path, keycol<font color="#909090">=0</font>, delimiter<font color="#909090">=','</font>, skiprows<font color="#909090">=0</font>)</dt><dd><tt>Reads&nbsp;a&nbsp;dataset&nbsp;(a&nbsp;dictionary&nbsp;of&nbsp;scanpaths)&nbsp;from&nbsp;a&nbsp;file.&nbsp;This&nbsp;function<br>
+expects&nbsp;a&nbsp;value-separated&nbsp;text&nbsp;file&nbsp;containing&nbsp;only&nbsp;numeric&nbsp;values,&nbsp;except<br>
+for&nbsp;the&nbsp;key&nbsp;column,&nbsp;which&nbsp;uniquely&nbsp;defines&nbsp;each&nbsp;scanpaths&nbsp;from&nbsp;the&nbsp;dataset.<br>
+&nbsp;<br>
+Arguments:<br>
+path&nbsp;--&nbsp;the&nbsp;file&nbsp;path<br>
+&nbsp;<br>
+Keyword&nbsp;arguments:<br>
+keycol&nbsp;--&nbsp;the&nbsp;column&nbsp;that&nbsp;should&nbsp;be&nbsp;used&nbsp;as&nbsp;a&nbsp;key<br>
+delimiter&nbsp;--&nbsp;delimiter&nbsp;character&nbsp;(default=",")<br>
+skiprows&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;rows&nbsp;to&nbsp;skip.&nbsp;Useful&nbsp;for&nbsp;skipping&nbsp;non-numeric<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;column&nbsp;headers&nbsp;(default=0)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Returns:<br>
+A&nbsp;dataset&nbsp;(dictionary&nbsp;of&nbsp;scanpaths)</tt></dd></dl>
+ <dl><dt><a name="-uni_dist"><strong>uni_dist</strong></a>(sp1, sp2)</dt><dd><tt>Determines&nbsp;the&nbsp;uni-directional&nbsp;distance&nbsp;between&nbsp;sp1&nbsp;and&nbsp;sp2.&nbsp;This&nbsp;function<br>
+is&nbsp;generally&nbsp;not&nbsp;used&nbsp;directly.<br>
+&nbsp;<br>
+Arguments:<br>
+sp1&nbsp;--&nbsp;the&nbsp;first&nbsp;scanpath<br>
+sp2&nbsp;--&nbsp;the&nbsp;second&nbsp;scanpath<br>
+&nbsp;<br>
+Returns:<br>
+A&nbsp;distance</tt></dd></dl>
+ <dl><dt><a name="-whiten"><strong>whiten</strong></a>(spd)</dt><dd><tt>Transforms&nbsp;all&nbsp;coordinates&nbsp;into&nbsp;standard&nbsp;deviations&nbsp;from&nbsp;the&nbsp;mean.&nbsp;So,&nbsp;for<br>
+example,&nbsp;a&nbsp;value&nbsp;of&nbsp;-0.5&nbsp;would&nbsp;mean&nbsp;that&nbsp;this&nbsp;value&nbsp;is&nbsp;0.5*std&nbsp;below&nbsp;the<br>
+mean.<br>
+&nbsp;<br>
+Arguments:<br>
+spd&nbsp;--&nbsp;a&nbsp;dataset&nbsp;(dictionary&nbsp;of&nbsp;scanpaths)<br>
+&nbsp;<br>
+Returns:<br>
+A&nbsp;"whitenend"&nbsp;dataset&nbsp;(dictionary&nbsp;of&nbsp;scanpaths)</tt></dd></dl>
+</td></tr></table>
+</body></html>
