@@ -147,7 +147,7 @@ Creating&nbsp;an&nbsp;array&nbsp;from&nbsp;sub-classes:<br>
 &gt;&gt;&gt;&nbsp;np.<a href="#-array">array</a>(np.mat('1&nbsp;2;&nbsp;3&nbsp;4'),&nbsp;subok=True)<br>
 matrix([[1,&nbsp;2],<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[3,&nbsp;4]])</tt></dd></dl>
- <dl><dt><a name="-cross_compare"><strong>cross_compare</strong></a>(spd, norm<font color="#909090">=True</font>, _whiten<font color="#909090">=True</font>)</dt><dd><tt>Cross-compare&nbsp;all&nbsp;scanpaths<br>
+ <dl><dt><a name="-cross_compare"><strong>cross_compare</strong></a>(spd, norm<font color="#909090">=True</font>, _whiten<font color="#909090">=True</font>, check_identical<font color="#909090">=False</font>)</dt><dd><tt>Cross-compare&nbsp;all&nbsp;scanpaths<br>
 &nbsp;<br>
 Arguments:<br>
 spd&nbsp;--&nbsp;a&nbsp;dictionary&nbsp;of&nbsp;scanpaths<br>
@@ -156,18 +156,73 @@ Keyword&nbsp;arguments:<br>
 norm&nbsp;--&nbsp;indicates&nbsp;if&nbsp;the&nbsp;distances&nbsp;should&nbsp;be&nbsp;normalized&nbsp;(default=True)&nbsp;&nbsp;<br>
 _whiten&nbsp;--&nbsp;indicates&nbsp;if&nbsp;the&nbsp;dataset&nbsp;should&nbsp;be&nbsp;whitened&nbsp;(see&nbsp;<a href="#-whiten">whiten</a>())<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(default=True)<br>
+check_identical&nbsp;--&nbsp;indicates&nbsp;if&nbsp;an&nbsp;exception&nbsp;should&nbsp;occur&nbsp;when&nbsp;the&nbsp;distance<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;between&nbsp;two&nbsp;(non-identical)&nbsp;scanpaths&nbsp;is&nbsp;zero.&nbsp;Lots&nbsp;of<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;zeros&nbsp;in&nbsp;the&nbsp;cross-comparison&nbsp;matrix&nbsp;may&nbsp;result&nbsp;in&nbsp;buggy<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clusering.&nbsp;(default=False)<br>
 &nbsp;<br>
 Returns:<br>
 A&nbsp;matrix&nbsp;of&nbsp;pair-wise&nbsp;distances</tt></dd></dl>
- <dl><dt><a name="-kmeans_cluster"><strong>kmeans_cluster</strong></a>(cm, k<font color="#909090">=2</font>, i<font color="#909090">=1</font>)</dt><dd><tt>Perform&nbsp;K-means&nbsp;clustering&nbsp;on&nbsp;a&nbsp;cross-comparison&nbsp;matrix&nbsp;as&nbsp;returned&nbsp;by<br>
-<a href="#-cross_compare">cross_compare</a>()<br>
+ <dl><dt><a name="-kcluster"><strong>kcluster</strong></a>(...)</dt><dd><tt><a href="#-kcluster">kcluster</a>(data,&nbsp;nclusters=2,&nbsp;mask=None,&nbsp;weight=None,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;transpose=0,&nbsp;npass=1,&nbsp;method='a',&nbsp;dist='e',<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;initialid=None)&nbsp;-&gt;&nbsp;clusterid,&nbsp;error,&nbsp;nfound<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;implements&nbsp;k-means&nbsp;clustering.<br>
+data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;nrows&nbsp;x&nbsp;ncolumns&nbsp;array&nbsp;containing&nbsp;the&nbsp;expression&nbsp;data<br>
+nclusters:&nbsp;number&nbsp;of&nbsp;clusters&nbsp;(the&nbsp;'k'&nbsp;in&nbsp;k-means)<br>
+mask&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;nrows&nbsp;x&nbsp;ncolumns&nbsp;array&nbsp;of&nbsp;integers,&nbsp;showing&nbsp;which&nbsp;data&nbsp;are<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;missing.&nbsp;If&nbsp;mask[i][j]==0,&nbsp;then&nbsp;data[i][j]&nbsp;is&nbsp;missing.<br>
+weight&nbsp;&nbsp;&nbsp;:&nbsp;the&nbsp;weights&nbsp;to&nbsp;be&nbsp;used&nbsp;when&nbsp;calculating&nbsp;distances<br>
+transpose:&nbsp;if&nbsp;equal&nbsp;to&nbsp;0,&nbsp;genes&nbsp;(rows)&nbsp;are&nbsp;clustered;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;equal&nbsp;to&nbsp;1,&nbsp;microarrays&nbsp;(columns)&nbsp;are&nbsp;clustered.<br>
+npass&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;number&nbsp;of&nbsp;times&nbsp;the&nbsp;k-means&nbsp;clustering&nbsp;algorithm&nbsp;is<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;performed,&nbsp;each&nbsp;time&nbsp;with&nbsp;a&nbsp;different&nbsp;(random)&nbsp;initial<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;condition.<br>
+method&nbsp;&nbsp;&nbsp;:&nbsp;specifies&nbsp;how&nbsp;the&nbsp;center&nbsp;of&nbsp;a&nbsp;cluster&nbsp;is&nbsp;found:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method=='a':&nbsp;arithmetic&nbsp;mean<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method=='m':&nbsp;median<br>
+dist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;specifies&nbsp;the&nbsp;distance&nbsp;function&nbsp;to&nbsp;be&nbsp;used:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist=='e':&nbsp;Euclidean&nbsp;distance<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist=='b':&nbsp;City&nbsp;Block&nbsp;distance<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist=='c':&nbsp;Pearson&nbsp;correlation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist=='a':&nbsp;absolute&nbsp;value&nbsp;of&nbsp;the&nbsp;correlation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist=='u':&nbsp;uncentered&nbsp;correlation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist=='x':&nbsp;absolute&nbsp;uncentered&nbsp;correlation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist=='s':&nbsp;Spearman's&nbsp;rank&nbsp;correlation<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;dist=='k':&nbsp;Kendall's&nbsp;tau<br>
+initialid:&nbsp;the&nbsp;initial&nbsp;clustering&nbsp;from&nbsp;which&nbsp;the&nbsp;algorithm&nbsp;should&nbsp;start.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If&nbsp;initialid&nbsp;is&nbsp;None,&nbsp;the&nbsp;routine&nbsp;carries&nbsp;out&nbsp;npass<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;repetitions&nbsp;of&nbsp;the&nbsp;EM&nbsp;algorithm,&nbsp;each&nbsp;time&nbsp;starting&nbsp;from&nbsp;a<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;different&nbsp;random&nbsp;initial&nbsp;clustering.&nbsp;If&nbsp;initialid&nbsp;is&nbsp;given,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;routine&nbsp;carries&nbsp;out&nbsp;the&nbsp;EM&nbsp;algorithm&nbsp;only&nbsp;once,&nbsp;starting<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;from&nbsp;the&nbsp;given&nbsp;initial&nbsp;clustering&nbsp;and&nbsp;without&nbsp;randomizing&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;order&nbsp;in&nbsp;which&nbsp;items&nbsp;are&nbsp;assigned&nbsp;to&nbsp;clusters&nbsp;(i.e.,&nbsp;using<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;same&nbsp;order&nbsp;as&nbsp;in&nbsp;the&nbsp;data&nbsp;matrix).&nbsp;In&nbsp;that&nbsp;case,&nbsp;the<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;k-means&nbsp;algorithm&nbsp;is&nbsp;fully&nbsp;deterministic.<br>
+&nbsp;<br>
+Return&nbsp;values:<br>
+clusterid:&nbsp;array&nbsp;containing&nbsp;the&nbsp;number&nbsp;of&nbsp;the&nbsp;cluster&nbsp;to&nbsp;which&nbsp;each<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gene/microarray&nbsp;was&nbsp;assigned&nbsp;in&nbsp;the&nbsp;best&nbsp;k-means&nbsp;clustering<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;solution&nbsp;that&nbsp;was&nbsp;found&nbsp;in&nbsp;the&nbsp;npass&nbsp;runs;<br>
+error:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;within-cluster&nbsp;sum&nbsp;of&nbsp;distances&nbsp;for&nbsp;the&nbsp;returned&nbsp;k-means<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clustering&nbsp;solution;<br>
+nfound:&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;number&nbsp;of&nbsp;times&nbsp;this&nbsp;solution&nbsp;was&nbsp;found.</tt></dd></dl>
+ <dl><dt><a name="-kmeans"><strong>kmeans</strong></a>(cm, k<font color="#909090">=2</font>, i<font color="#909090">=10</font>)</dt><dd><tt>Perform&nbsp;K-means&nbsp;clustering&nbsp;on&nbsp;a&nbsp;cross-comparison&nbsp;matrix&nbsp;as&nbsp;returned&nbsp;by<br>
+<a href="#-cross_compare">cross_compare</a>().<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;uses&nbsp;Pycluster.&nbsp;Alternative&nbsp;implementations&nbsp;can&nbsp;be&nbsp;found&nbsp;in<br>
+scipy&nbsp;and&nbsp;python-cluster:<br>
+&nbsp;<br>
+&lt;<a href="http://bonsai.hgc.jp/~mdehoon/software/cluster/software.htm#pycluster">http://bonsai.hgc.jp/~mdehoon/software/cluster/software.htm#pycluster</a>&gt;<br>
+&lt;<a href="http://docs.scipy.org/doc/scipy/reference/cluster.vq.html">http://docs.scipy.org/doc/scipy/reference/cluster.vq.html</a>&gt;<br>
+&lt;<a href="http://python-cluster.sourceforge.net/">http://python-cluster.sourceforge.net/</a>&gt;<br>
 &nbsp;<br>
 Arguments:<br>
 cm&nbsp;--&nbsp;the&nbsp;cross-comparison&nbsp;matrix<br>
 &nbsp;<br>
 Keyword&nbsp;arguments:<br>
-k&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;clusters<br>
-i&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;iterations<br>
+k&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;clusters&nbsp;(default=2)<br>
+i&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;iterations&nbsp;(default=10)<br>
 &nbsp;<br>
 Returns:<br>
 A&nbsp;key-cluster&nbsp;dictionary</tt></dd></dl>
@@ -222,15 +277,7 @@ skiprows&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;rows&nbsp;to&nbsp;skip.&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
 Returns:<br>
 A&nbsp;dataset&nbsp;(dictionary&nbsp;of&nbsp;scanpaths)</tt></dd></dl>
- <dl><dt><a name="-uni_dist"><strong>uni_dist</strong></a>(sp1, sp2)</dt><dd><tt>Determines&nbsp;the&nbsp;uni-directional&nbsp;distance&nbsp;between&nbsp;sp1&nbsp;and&nbsp;sp2.&nbsp;This&nbsp;function<br>
-is&nbsp;generally&nbsp;not&nbsp;used&nbsp;directly.<br>
-&nbsp;<br>
-Arguments:<br>
-sp1&nbsp;--&nbsp;the&nbsp;first&nbsp;scanpath<br>
-sp2&nbsp;--&nbsp;the&nbsp;second&nbsp;scanpath<br>
-&nbsp;<br>
-Returns:<br>
-A&nbsp;distance</tt></dd></dl>
+ <dl><dt><a name="-uni_dist"><strong>uni_dist</strong></a>(sp1, sp2)</dt><dd><tt>For&nbsp;internal&nbsp;use.&nbsp;See&nbsp;<a href="#-sp_dist">sp_dist</a>()</tt></dd></dl>
  <dl><dt><a name="-whiten"><strong>whiten</strong></a>(spd)</dt><dd><tt>Transforms&nbsp;all&nbsp;coordinates&nbsp;into&nbsp;standard&nbsp;deviations&nbsp;from&nbsp;the&nbsp;mean.&nbsp;So,&nbsp;for<br>
 example,&nbsp;a&nbsp;value&nbsp;of&nbsp;-0.5&nbsp;would&nbsp;mean&nbsp;that&nbsp;this&nbsp;value&nbsp;is&nbsp;0.5*std&nbsp;below&nbsp;the<br>
 mean.<br>
