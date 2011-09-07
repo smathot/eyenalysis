@@ -1,0 +1,17 @@
+EYENALYSIS
+==========
+
+Copyright, 2011, Sebastiaan Mathot
+<http://www.cogsci.nl/>
+
+ABOUT
+=====
+Eyenalysis is an algorithm that provides a distance measure for a pair of
+scanpaths (eye movement patterns).
+
+DOCUMENTATION
+=============
+For documentation, see eyenalysis.html. For demonstration usage , see demo1.py
+and demo2.py.
+
+
