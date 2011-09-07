@@ -38,6 +38,6 @@ for key1 in cm:
 print
 
 print "Clustering"
-cl = kmeans_cluster(cm, k=2,i=10)
+cl = kmeans(cm, k=2,i=10)
 for key in cl:
 	print key, cl[key]

@@ -14,4 +14,9 @@ DOCUMENTATION
 For documentation, see eyenalysis.html. For demonstration usage, see demo1.py
 and demo2.py.
 
+DEPENDENCIES
+============
+- Numpy <http://numpy.scipy.org/>
+- Scipy <http://www.scipy.org/>
+- Pycluster <http://bonsai.hgc.jp/~mdehoon/software/cluster/software.htm>
 

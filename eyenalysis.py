@@ -57,25 +57,11 @@ for sp1 in cm:
 from numpy import loadtxt, delete, array, mean, std
 from scipy.spatial.distance import euclidean, cdist
 from scipy.cluster.vq import whiten
-
-try:
-	from cluster import KMeansClustering, centroid
-except:
-	pass	
+from Pycluster import kcluster
 		
 def uni_dist(sp1, sp2):
 
-	"""
-	Determines the uni-directional distance between sp1 and sp2. This function
-	is generally not used directly.
-	
-	Arguments:
-	sp1 -- the first scanpath
-	sp2 -- the second scanpath
-	
-	Returns:
-	A distance
-	"""
+	"""For internal use. See sp_dist()"""
 	
 	d = .0
 	for row in cdist(sp1, sp2):
@@ -103,7 +89,7 @@ def sp_dist(sp1, sp2, norm=True):
 		d = d / max(len(sp1), len(sp2))
 	return d
 	
-def cross_compare(spd, norm=True, _whiten=True):
+def cross_compare(spd, norm=True, _whiten=True, check_identical=False):
 
 	"""
 	Cross-compare all scanpaths
@@ -115,6 +101,10 @@ def cross_compare(spd, norm=True, _whiten=True):
 	norm -- indicates if the distances should be normalized (default=True)	
 	_whiten -- indicates if the dataset should be whitened (see whiten())
 			   (default=True)
+	check_identical -- indicates if an exception should occur when the distance
+					   between two (non-identical) scanpaths is zero. Lots of
+					   zeros in the cross-comparison matrix may result in buggy
+					   clusering. (default=False)
 	
 	Returns:
 	A matrix of pair-wise distances
@@ -132,7 +122,7 @@ def cross_compare(spd, norm=True, _whiten=True):
 				d = cm[sp2][sp1]
 			else:
 				d = sp_dist(spd[sp1], spd[sp2], norm=norm)
-				if d == 0:
+				if check_identical and d == 0:
 					raise Exception("Scanpaths %s and %s appear to be identical" % (sp1, sp2))
 			cm[sp1][sp2] = d
 	return cm
@@ -253,61 +243,44 @@ def spd_from_txt(path, keycol=0, delimiter=",", skiprows=0):
 		spd[key].append( [float(val) for val in delete(row, keycol)] )
 	return spd
 	
-def kmeans_cluster(cm, k=2, i=1):
+def kmeans(cm, k=2, i=10):
 
 	"""
 	Perform K-means clustering on a	cross-comparison matrix as returned by
-	cross_compare()
+	cross_compare().
+	
+	This function uses Pycluster. Alternative implementations can be found in
+	scipy and python-cluster:
+	
+	<http://bonsai.hgc.jp/~mdehoon/software/cluster/software.htm#pycluster>
+	<http://docs.scipy.org/doc/scipy/reference/cluster.vq.html>
+	<http://python-cluster.sourceforge.net/>
 	
 	Arguments:
 	cm -- the cross-comparison matrix
 	
 	Keyword arguments:
-	k -- the number of clusters
-	i -- the number of iterations
+	k -- the number of clusters (default=2)
+	i -- the number of iterations (default=10)
 	
 	Returns:
 	A key-cluster dictionary
 	"""
 	
-	# Sanity checks
-	try:
-		KMeansClustering
-	except:
-		raise Exception("cluster.KMeansClustering() is not available. Please install python-cluster <http://python-cluster.sourceforge.net/>.")
-			
-	if len(cm) <= k:
-		raise Exception("The number of rows must be larger than the number of clusters")		
-	
 	# First convert the dictionary into a list of tuples so it can be handled
 	# by python-cluster
 	data = []
 	for row in cm:
-		data.append(tuple(cm[row].values()))						
-				
-	# Create clustering instance
-	kmeans = KMeansClustering(data)
-				
-	# Repeat the clustering a number of times to get the best result	
-	md = None
-	for x in range(i):
-		cl = kmeans.getclusters(k)	
-		d = 0
-		for cluster in cl:
-			for item in cluster:
-				d += kmeans.distance(item, centroid(cluster))
-		if md == None or d < md:
-			md = d
-		if md == 0:
-			break                              	
+		data.append(tuple(cm[row].values()))									
+			
+	# Perform the clustering
+	clusterid, error, nfound = kcluster(data, nclusters=2)
 	
-	# Parse the clustering into a dictionary and return
+	# Parse the results into a dictionary and return
 	d = {}
-	for row in cm:
-		i = 0
-		for cluster in cl:
-			if tuple(cm[row].values()) in cluster:
-				d[row] = i
-			i += 1
+	for i in range(len(clusterid)):
+		d[cm.keys()[i]] = clusterid[i]	
 	return d
+	
+
 
