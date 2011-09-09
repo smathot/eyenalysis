@@ -50,7 +50,7 @@ sp2&nbsp;=&nbsp;[pt2,&nbsp;pt3]<br>
 spd&nbsp;=&nbsp;{"sp1"&nbsp;:&nbsp;sp1,&nbsp;"sp2"&nbsp;:&nbsp;sp2}<br>
 &nbsp;<br>
 USAGE<br>
-====<br>
+=====<br>
 &nbsp;<br>
 from&nbsp;eyenalysis&nbsp;import&nbsp;*<br>
 &nbsp;<br>
@@ -208,7 +208,10 @@ error:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;within-cluster&nbsp;sum&nbsp;of&nbs
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;clustering&nbsp;solution;<br>
 nfound:&nbsp;&nbsp;&nbsp;&nbsp;the&nbsp;number&nbsp;of&nbsp;times&nbsp;this&nbsp;solution&nbsp;was&nbsp;found.</tt></dd></dl>
  <dl><dt><a name="-kmeans"><strong>kmeans</strong></a>(cm, k<font color="#909090">=2</font>, i<font color="#909090">=10</font>)</dt><dd><tt>Perform&nbsp;K-means&nbsp;clustering&nbsp;on&nbsp;a&nbsp;cross-comparison&nbsp;matrix&nbsp;as&nbsp;returned&nbsp;by<br>
-<a href="#-cross_compare">cross_compare</a>().<br>
+<a href="#-cross_compare">cross_compare</a>().&nbsp;Note&nbsp;that&nbsp;clustering&nbsp;of&nbsp;two&nbsp;perfectly&nbsp;segregated&nbsp;groups<br>
+(i.e.,&nbsp;groups&nbsp;consisting&nbsp;of&nbsp;identical&nbsp;items)&nbsp;sometimes&nbsp;fails,&nbsp;so&nbsp;that&nbsp;all<br>
+items&nbsp;are&nbsp;clustered&nbsp;into&nbsp;the&nbsp;same&nbsp;group.&nbsp;Not&nbsp;sure&nbsp;why,&nbsp;but&nbsp;this&nbsp;appears&nbsp;to<br>
+affect&nbsp;many&nbsp;implementations&nbsp;of&nbsp;K-Means&nbsp;clustering,&nbsp;not&nbsp;just&nbsp;Pycluster.<br>
 &nbsp;<br>
 This&nbsp;function&nbsp;uses&nbsp;Pycluster.&nbsp;Alternative&nbsp;implementations&nbsp;can&nbsp;be&nbsp;found&nbsp;in<br>
 scipy&nbsp;and&nbsp;python-cluster:<br>
@@ -277,7 +280,6 @@ skiprows&nbsp;--&nbsp;the&nbsp;number&nbsp;of&nbsp;rows&nbsp;to&nbsp;skip.&nbsp;
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
 Returns:<br>
 A&nbsp;dataset&nbsp;(dictionary&nbsp;of&nbsp;scanpaths)</tt></dd></dl>
- <dl><dt><a name="-uni_dist"><strong>uni_dist</strong></a>(sp1, sp2)</dt><dd><tt>For&nbsp;internal&nbsp;use.&nbsp;See&nbsp;<a href="#-sp_dist">sp_dist</a>()</tt></dd></dl>
  <dl><dt><a name="-whiten"><strong>whiten</strong></a>(spd)</dt><dd><tt>Transforms&nbsp;all&nbsp;coordinates&nbsp;into&nbsp;standard&nbsp;deviations&nbsp;from&nbsp;the&nbsp;mean.&nbsp;So,&nbsp;for<br>
 example,&nbsp;a&nbsp;value&nbsp;of&nbsp;-0.5&nbsp;would&nbsp;mean&nbsp;that&nbsp;this&nbsp;value&nbsp;is&nbsp;0.5*std&nbsp;below&nbsp;the<br>
 mean.<br>
