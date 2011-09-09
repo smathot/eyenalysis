@@ -76,7 +76,10 @@ def sp_dist(sp1, sp2, norm=True):
 	"""
 		
 	c = cdist(sp1, sp2)
-	return (c.min(axis=0).sum() + c.min(axis=1).sum()) / max(len(sp1), len(sp2))
+	d = c.min(axis=0).sum() + c.min(axis=1).sum()
+	if norm:
+		d /= max(len(sp1), len(sp2))
+	return d
 	
 def cross_compare(spd, norm=True, _whiten=True, check_identical=False):
 
