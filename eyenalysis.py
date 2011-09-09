@@ -40,7 +40,7 @@ sp2 = [pt2, pt3]
 spd = {"sp1" : sp1, "sp2" : sp2}
 
 USAGE
-====
+=====
 
 from eyenalysis import *
 
@@ -59,15 +59,6 @@ from scipy.spatial.distance import euclidean, cdist
 from scipy.cluster.vq import whiten
 from Pycluster import kcluster
 		
-def uni_dist(sp1, sp2):
-
-	"""For internal use. See sp_dist()"""
-	
-	d = .0
-	for row in cdist(sp1, sp2):
-		d += row.min()
-	return d		
-	
 def sp_dist(sp1, sp2, norm=True):
 
 	"""
@@ -83,11 +74,9 @@ def sp_dist(sp1, sp2, norm=True):
 	Returns:
 	A distance
 	"""
-	
-	d = uni_dist(sp1, sp2) + uni_dist(sp2, sp1)
-	if norm:
-		d = d / max(len(sp1), len(sp2))
-	return d
+		
+	c = cdist(sp1, sp2)
+	return (c.min(axis=0).sum() + c.min(axis=1).sum()) / max(len(sp1), len(sp2))
 	
 def cross_compare(spd, norm=True, _whiten=True, check_identical=False):
 
@@ -247,7 +236,10 @@ def kmeans(cm, k=2, i=10):
 
 	"""
 	Perform K-means clustering on a	cross-comparison matrix as returned by
-	cross_compare().
+	cross_compare(). Note that clustering of two perfectly segregated groups
+	(i.e., groups consisting of identical items) sometimes fails, so that all
+	items are clustered into the same group. Not sure why, but this appears to
+	affect many implementations of K-Means clustering, not just Pycluster.
 	
 	This function uses Pycluster. Alternative implementations can be found in
 	scipy and python-cluster:
@@ -274,12 +266,12 @@ def kmeans(cm, k=2, i=10):
 		data.append(tuple(cm[row].values()))									
 			
 	# Perform the clustering
-	clusterid, error, nfound = kcluster(data, nclusters=2)
+	clusterid, error, nfound = kcluster(data, nclusters=k, npass=i)
 	
 	# Parse the results into a dictionary and return
 	d = {}
-	for i in range(len(clusterid)):
-		d[cm.keys()[i]] = clusterid[i]	
+	for j in range(len(clusterid)):
+		d[cm.keys()[j]] = clusterid[j]	
 	return d
 	
 
