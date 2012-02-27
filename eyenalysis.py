@@ -57,7 +57,6 @@ for sp1 in cm:
 from numpy import loadtxt, delete, array, mean, std
 from scipy.spatial.distance import euclidean, cdist
 from scipy.cluster.vq import whiten
-from Pycluster import kcluster
 		
 def sp_dist(sp1, sp2, norm=True):
 
@@ -261,6 +260,8 @@ def kmeans(cm, k=2, i=10):
 	Returns:
 	A key-cluster dictionary
 	"""
+	
+	from Pycluster import kcluster
 	
 	# First convert the dictionary into a list of tuples so it can be handled
 	# by python-cluster

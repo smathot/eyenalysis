@@ -1,4 +1,7 @@
-Copyright, 2011, Sebastiaan Mathot
+Eyenalysis - A simple method to estimate similarity between eye movement
+sequences (Experiment 1)
+
+Copyright 2011-2012 Sebastiaan Mathot
 <http://www.cogsci.nl/>
 
 1. INTRODUCTION
@@ -44,6 +47,7 @@ scripts/compare_eyenalysis.py	Perform clustering using Eyenalysis
 scripts/compare_levenshtein.py	Perform clustering using Levenshtein
 scripts/compare_scanmatch.py	Perform clustering using ScanMatch
 scripts/createnoiselogs.py		Generate noiselogs from artificial scanpaths
+scripts/descriptives.py			Calculate the descriptive statistics
 scripts/noiselogstostrings.py	Convert noiselogs into strings
 scripts/plot.py					Plot the main results data
 
@@ -96,6 +100,13 @@ python scripts/noiselogstostrings.py
 Using the compare.m script, ScanMatch <http://eis.bris.ac.uk/~psidg/ScanMatch/>
 is applied to the strings. The resulting output file is saved as
 scanmatch/scanmatch_output.txt.
+
+The following (non-default) parameters should be used for the ScanMatch Info
+Struct:
+- Number of bins X = 26, Y = 26
+- Roi Modulus = 26
+- Substituion Matrix Threshold = 19 (2x the standard deviation of the saccade
+  size as determined by noiselogstostrings.py)
 
 4.6. PERFORM CLUSTERING
 =======================
