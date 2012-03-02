@@ -21,24 +21,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ABOUT
 =====
 This script generates a plot of the average similarity, as determined by
-eyenalysis, as a function of the number of dimensions and the scanpath length.
+eyenalysis, as a function of the dimensionality, scanpath length, and spacing.
 """
 
 from eyenalysis import *
 import numpy as np
 from matplotlib import pyplot
 
-if __name__ == "__main__":
+def plot(plotPos, growing, title):
 
-	n = 1000
-	aLen = range(1,33)
-	aNDim = [1,2,4,8,16]
-	colors = ["#73d216", "#3465a5", "#f57900", "#cc0000", "#729fcf", "#75507b"]
-	pyplot.figure(figsize=(5, 4))
-	pyplot.rcParams['font.size'] = 10
-	pyplot.rcParams['font.family'] = "Ubuntu"
-	pyplot.xlim( (0,33) )	
+	"""
+	Create a single sub plot
+	
+	Arguments:
+	plotPos -- the plot position as passed to pyplot.subplot()
+	growing -- a boolean indicating whether the condition is growing (True) or
+			   fixed (False).
+	title -- Title of the subplot
+	"""
 
+	pyplot.subplot(plotPos)
+	colors = ["#73d216", "#3465a5", "#f57900", "#cc0000", "#729fcf", "#75507b"]	
 	for nDim in aNDim:
 		yData = []
 		yErr = []
@@ -47,15 +50,31 @@ if __name__ == "__main__":
 			for i in range(n):		
 				sp1 = np.random.random( (l,nDim) )
 				sp2 = np.random.random( (l,nDim) )
+				if growing:
+					sp1 *= l
+					sp2 *= l
 				lDist.append( sp_dist(sp1, sp2))
 			aDist = np.array(lDist)			
 			yData.append(aDist.mean())
 			yErr.append(aDist.std())
 		pyplot.plot(aLen, yData, label='%d' % nDim, color=colors.pop(), \
 			linewidth=2)
-		
-	pyplot.legend(title='Nr. of dimensions', ncol=3, fancybox=True)
+	pyplot.title(title)
 	pyplot.xlabel('Sequence length') 
-	pyplot.ylabel('Mean similarity') 	
+	pyplot.ylabel('Mean distance') 	
+
+if __name__ == "__main__":
+
+	n = 1000
+	aLen = range(1,33)
+	aNDim = [1,2,4,8,16]
+	pyplot.figure(figsize=(9, 4))
+	pyplot.rcParams['font.size'] = 10
+	pyplot.rcParams['font.family'] = "Times new roman"			
+	pyplot.xlim( (0,33) )	
+	plot('121', False, 'a) Fixed space')
+	plot('122', True, 'b) Growing space')
+	pyplot.legend(title='Nr. of dimensions', ncol=1, frameon=True, loc='upper left', fancybox=True)	
 	pyplot.savefig('plots/randomDataSim.svg')
+	pyplot.savefig('plots/randomDataSim.png', dpi=300)
 	pyplot.show()
